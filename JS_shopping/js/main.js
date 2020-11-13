@@ -23,7 +23,7 @@ $( document ).ready (function(){
     addItemToCart();
   });
 
-    $('.clear-cart').click(function(e) {
+  $('.clear-cart').click(function(e) {
       clearCart();
   });
 

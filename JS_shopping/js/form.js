@@ -5,6 +5,7 @@ $(document).ready (function(){
   $('input#last_name').on("blur", validateLastName);
   $('input#input_email').on("blur", validateEmail);
   $('input#input_address').on("blur", validateAddress);
+  $('input#input_password').on("blur", validatePassword);
 
 
   function validateFirstName(){
@@ -45,7 +46,6 @@ $(document).ready (function(){
 
   function validateEmail(){
       let emailField=$('#input_email');
-      // let emailError=$('#inputEmail + span.error')[0];
       let emailError=$('#input_email').parent().siblings().find('span.error')[0];
       if(!emailField[0].validity.valid){
           if(emailField[0].validity.valueMissing) {
@@ -67,19 +67,46 @@ $(document).ready (function(){
   }
 
   function validateAddress() {
-  let addressField = $('#input_address')[0];
-  let addressError = $('#input_address').parent().siblings().find('span.error')[0];
-  if (!addressField.validity.valid) {
-    if (addressField.validity.tooShort) {
-      addressError.textContent = `Address should be at least ${ addressField.minLength } characters; you entered ${ addressField.value.length }.`;
+      let addressField  = $('#input_address');
+      let addressError = $('#input_address').parent().siblings().find('span.error')[0];
+      if (!addressField[0].validity.valid) {
+      if(addressField[0].validity.valueMissing) {
+          addressError.textContent = 'You need to enter an address.';
+        }
+      else if (addressField[0].validity.tooShort) {
+        addressError.textContent = `Address should be at least ${ addressField[0].minLength } characters.`;
+      }
+      else if (addressField[0].validity.tooLong) {
+        addressError.textContent = `Address should be at most ${ addressField[0].maxLength } characters.`;
+      }
+      addressField.removeClass('is-valid');
+      addressField.addClass('is-invalid');
     }
-    else if (addressField.validity.tooLong) {
-      addressError.textContent = `Address should be at most ${ addressField.maxLength } characters; you entered ${ addressField.value.length }.`;
-    }
-  }
-  else {
-    addressError.textContent = "";
+    else {
+      addressError.textContent = "";
+      addressField.removeClass('is-invalid');
+      addressField.addClass('is-valid');
   }
 }
+
+  function validatePassword(){
+    let passwordField=$('#input_password');
+    let passwordError=$('#input_password').parent().siblings().find('span.error')[0];
+    if(!passwordField[0].validity.valid){
+        if(passwordField[0].validity.valueMissing) {
+            passwordError.textContent = 'You need to enter a password.';
+        } else if(passwordField[0].validity.tooShort) {
+            passwordError.textContent = `Password must be at least ${ passwordField[0].minLength } characters.`;
+        } else if(passwordField[0].validity.tooLong) {
+            passwordError.textContent = `Password must be no more than ${ passwordField[0].maxLength } characters.`;
+        }
+        passwordField.removeClass('is-valid');
+        passwordField.addClass('is-invalid');
+    } else {
+        passwordError.textContent = '';
+        passwordField.removeClass('is-invalid');
+        passwordField.addClass('is-valid');
+    }
+  }
 
 });
